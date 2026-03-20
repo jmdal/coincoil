@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "coilgun")(type "KiCad")(uri "${KIPRJMOD}/coilgun.kicad_sym")(options "")(descr ""))
+)

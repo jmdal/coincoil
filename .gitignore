@@ -1,0 +1,6 @@
+*.ans
+*.raw
+*.log
+*.db
+*.net
+pyscripts/output
