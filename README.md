@@ -10,12 +10,11 @@ Primary test results, as well as some design deliberation documents, can be foun
 ## Simulation Details
 2 primary simulation apps are currently used, [LTSpice](https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html) and [FEMM](https://www.femm.info/)
 More tests will be done in the future; future iterations may use different apps and software.
-A considered contender for other software is [FreeCAD](https://www.freecad.org/) and its inbuilt ELMER electromagnetics solver to replace FEMM so that the 3d-model and CAD files that will be used as primary coilgun design can be modified and simulated directly rather than being abstracted.
+A considered contender for other software is [FreeCAD](https://www.freecad.org/) integrated with the [ELMER FEM solver](https://www.elmerfem.org/blog/) to replace FEMM so that the 3d-model and CAD files that will be used as primary coilgun design can be modified and simulated directly rather than being abstracted.
 
 [Python](https://www.python.org/) is used as a cross-controller between all the simulations (see pyscripts folder, such files are named "fullsim"); take data from initial parameters, feed initial data into electric simulation, take sim data and further feed into magnetics simulation, then post-process and report data in a .csv file to be integrated into a larger spreadsheet (see results spreadsheet). By use of iterables, thousands of test cases can be batch-tested without manual intervention.
 
 ## Prototype Details
 Details on physical prototypes will be placed in a Google Doc soon to come; this will begin once equipment is acquired and the first prototypes are assembled. Design files for creating such prototypes will continue to be placed and updated in this repository. Check back every once in a while to see updates.
 
-## Miscellaneous Details
-Don't mind the stated 45%+ "Action Game Script" listed on the repo; I have no clue why it says that but it's most likely reading the .asc files that were used for LTSpice. In reality, as of writing the project is around 90%+ Python and the rest was some Lua used in scripts for FEMM before switching to the PyFEMM interface.
+Update (March 27, 2026) -- Due to recent international events, initial coilgun prototyping may be delayed indefinitely due to difficulties in energy and electricity supply as well as in the acquisition of materials. Thus, upcoming progress will focus primarily on implementation of FreeCAD+ELMER in coilgun simulation.
