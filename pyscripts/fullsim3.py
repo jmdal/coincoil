@@ -126,7 +126,7 @@ def fullsim(parameters, spice_file=""):
 
     print("Starting LTSpice...")
 
-    sim = PyLTSpice.SimRunner(output_folder="./output/ltspice",simulator="D:\\ProgramFiles\\LTspice\\LTspice.exe",parallel_sims=10)
+    sim = PyLTSpice.SimRunner(output_folder="pyscripts/output/ltspice",simulator="D:\\ProgramFiles\\LTspice\\LTspice.exe",parallel_sims=10)
 
     net = PyLTSpice.SpiceEditor(spice_file)
 
@@ -178,9 +178,9 @@ def fullsim(parameters, spice_file=""):
         #print(f"{dim1} {dim2} ", end="")
         #print(dim1)
         #print(dim2)
-        femm.opendocument("../femm/coilgunauto.fem")
+        femm.opendocument("femm/coilgunauto.fem")
         femm.main_minimize()
-        femm.mi_saveas(f"./output/femm/coilgunauto_scriptsim.fem")
+        femm.mi_saveas(f"pyscripts/output/femm/coilgunauto_scriptsim.fem")
         femm.mi_seteditmode("segments")
         femm.mi_drawrectangle(dim1[0], dim1[1], dim2[0], dim2[1])
         femm.mi_addmaterial("Coilwire", 1, 1, 0, 0, 58, 0, 0, 1, 3, 0, 0, 1, i.wdia)
@@ -255,7 +255,7 @@ def fullsim(parameters, spice_file=""):
     # P5 Results
     print(f"Completed [{len(parameters)}] tests.")
     print("Results ready. Writing to spreadsheet...")
-    with open("./output/output.csv", 'w', newline='') as file:
+    with open("pyscripts/output/output.csv", 'w', newline='') as file:
         writ = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
         for i in range(len(parameters)):
             pm = parameters[i]
@@ -303,17 +303,17 @@ def fullsim(parameters, spice_file=""):
 
 
 fullsim([Coilsim(Wdia, Bwid, Bhei, Lthi, Turn, Clen, Capa, Volt, Scon)
-         for Wdia in [awg(i) for i in range(10, 24+1, 2)] # mm (+ AWG)
+         for Wdia in [awg(i) for i in range(12, 18+1, 2)] # mm (+ AWG)
          for Bwid in [24] # mm
          for Bhei in [3] # mm
          for Lthi in [i/2 for i in range(2,10+1)] # mm
          for Turn in [i for i in range(25, 250+1, 25)] # count
-         for Clen in [30, 40, 50] # mm
-         for Capa in [10000] # uF
-         for Volt in [20] # V
-         for Scon in [20] # count
+         for Clen in [60, 80, 100] # mm
+         for Capa in [1000] # uF
+         for Volt in [90] # V
+         for Scon in [10] # count
          ],
-         "../ltspice/coilgunauto.asc")
+         "ltspice/coilgunauto.asc")
 """
 fullsim([Coilsim(Wdia, Bwid, Bhei, Lthi, Turn, Clen, Capa, Volt, Scon)
          for Wdia in [awg(14)] # mm (+ AWG)

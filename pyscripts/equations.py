@@ -119,9 +119,16 @@ coilturnlayeredtable(
 #stageaccel(345,0.04,20)
 
 """
-coilturnlayered(awg[15], 33.40, 100, 40, False)
+#coilturnlayered(awg[15], 33.40, 100, 40, False)
 #stageaccel2(600, 0.04, 20) # safe assumption -- 600 m/s
 #stageaccel(600, 0.04, 20) # safe assumption -- 600 m/s
 
 #ltscoilparams(20)
 #ltscoilpulse(20)
+
+print(onderdonk_i(
+    (0.81/0.0254)**2,
+    183,
+    40,
+    0.010
+))
