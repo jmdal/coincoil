@@ -17,4 +17,4 @@ A considered contender for other software is [FreeCAD](https://www.freecad.org/)
 ## Prototype Details
 Details on physical prototypes will be placed in a Google Doc soon to come; this will begin once equipment is acquired and the first prototypes are assembled. Design files for creating such prototypes will continue to be placed and updated in this repository. Check back every once in a while to see updates.
 
-Update (March 27, 2026) -- Due to recent international events, initial coilgun prototyping may be delayed indefinitely due to difficulties in energy and electricity supply as well as in the acquisition of materials. Thus, upcoming progress will focus primarily on implementation of FreeCAD+ELMER in coilgun simulation.
+Update (Apr. 11, 2026) -- Physical prototyping has commenced; expect progress photos and updates in the near future (within a week).
