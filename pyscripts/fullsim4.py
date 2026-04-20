@@ -316,7 +316,7 @@ def fullsim(parameters, spice_file=""):
 
 
 fullsim([Coilsim(Wdia, Bwid, Bhei, Lthi, Turn, Clen, Capa, Volt, Scon)
-         for Wdia in [awg(i) for i in range(14, 16+1, 2)] # mm (+ AWG)
+         for Wdia in [awg(12), awg(14), awg(16)] # mm (+ AWG)
          for Bwid in [24] # mm
          for Bhei in [3] # mm
          for Lthi in [i for i in range(2,6)] # mm
