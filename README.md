@@ -18,6 +18,8 @@ A considered contender for other software is [FreeCAD](https://www.freecad.org/)
 Details on physical prototypes will be placed in a Google Doc soon to come; this will begin once equipment is acquired and the first prototypes are assembled. Design files for creating such prototypes will continue to be placed and updated in this repository. Check back every once in a while to see updates.
 
 ## Updates 
-(Apr. 11, 2026) -- Physical prototyping has commenced; expect progress photos and updates in the near future.
-(Apr. 20, 2026) -- Updates to Sim v4, with improved SPICE model, addition of snubber resistor and use of actual datasheet properties
+
+(Apr. 11, 2026) -- Physical prototyping has commenced; expect progress photos and updates in the near future
+
+(Apr. 20, 2026) -- Updates to Sim v4 (see fullsim4.py), with improved SPICE model, addition of snubber resistor and use of actual datasheet properties
 
