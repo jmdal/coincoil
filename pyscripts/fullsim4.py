@@ -35,6 +35,8 @@ class Coilsim:
         # Total Inductance (micro-henry)
 
         self.curr = 0 # Current, to calculate later
+        self.rise = 0 # Time to max current rise
+        self.fall = 0 # Time to current final drop
 
 
 
@@ -67,7 +69,7 @@ def wirelength(wdia, bdia, turn, tpl):
 def wirelengthrect(wiredia, basewid, basehei, turns, turnperlayer):
     ttl = 0
     layer = 0
-    print(turnperlayer)
+    #print(turnperlayer)
     for cur in range(0,turns): # cur - current turn
         ttl += (2*(basewid + (layer * 2*wiredia)) + 2*(basehei + (layer * 2*wiredia)))
         #print(f"{ttl:.5f}\t{2*(basewid + (layer * 2*wiredia)):.4f} \t {2*(basehei + (layer * 2*wiredia)):.4f} \t {layer:.0f}")
@@ -90,10 +92,10 @@ def fullsim(parameters, spice_file=""):
         if prompt == "C":
             return 0
         elif prompt == "V":
-            print("Test [xx]\tWdia [mm]\tBwid [mm]\tBhei [mm]\tLthi [mm]\tTurn [xx]\tClen [mm]\tScon [xx]\tTlen [mm]\tCapa [µF]\tVolt [1V]\tFwid [mm]\tFhei [mm]\tCres [mΩ]\tCind [µH]")
+            print("Test [xx]\tWdia [mm]\tBwid [mm]\tBhei [mm]\tLthi [mm]\tTurn [xx]\tTpll [xx]\tClen [mm]\tScon [xx]\tTlen [mm]\tCapa [µF]\tVolt [1V]\tFwid [mm]\tFhei [mm]\tCres [mΩ]\tCind [µH]")
             for i in range(len(parameters)):
                 pm = parameters[i]
-                print(f"{i+1:.0f}\t\t{pm.wdia:.2f}\t\t{pm.bwid:.2f}\t\t{pm.bhei:.2f}\t\t{pm.lthi:.2f}\t\t{pm.turn:.0f}\t\t{pm.clen:.2f}\t\t{pm.scon:.0f}\t\t{pm.clen*pm.scon:.2f}\t\t{pm.capa:.2f}\t\t{pm.volt:.2f}\t\t{pm.fwid:.2f}\t\t{pm.fhei:.2f}\t\t{pm.cres:.2f}\t\t{pm.cind:.2f}")
+                print(f"{i+1:.0f}\t\t{pm.wdia:.2f}\t\t{pm.bwid:.2f}\t\t{pm.bhei:.2f}\t\t{pm.lthi:.2f}\t\t{pm.turn:.0f}\t\t{pm.tpll:.0f}\t\t{pm.clen:.2f}\t\t{pm.scon:.0f}\t\t{pm.clen*pm.scon:.2f}\t\t{pm.capa:.0f}\t\t{pm.volt:.2f}\t\t{pm.fwid:.2f}\t\t{pm.fhei:.2f}\t\t{pm.cres:.2f}\t\t{pm.cind:.2f}")
         elif prompt == "S":
             break
 
@@ -151,8 +153,14 @@ def fullsim(parameters, spice_file=""):
     for raw, log in sim:
             if log:
                 data = PyLTSpice.LTSpiceLogReader(log)
+                print(vars(data))
+                print([data["current"][0], data["rise"][0], data["fall"][0], data["charge"][0]])
                 #print(data["current"])
                 parameters[data["test"][0]].curr = data["current"][0]
+                parameters[data["test"][0]].rise = data["rise"][0]
+                parameters[data["test"][0]].fall = data["fall"][0] - parameters[data["test"][0]].rise
+                parameters[data["test"][0]].rech = data["charge"][0] - 1000
+                
                 #cnts[data["test"][0]] = data["current"][0]
 
 
@@ -267,6 +275,7 @@ def fullsim(parameters, spice_file=""):
                 pm.bhei,
                 pm.lthi,
                 pm.turn,
+                pm.tpll,
                 pm.clen,
                 pm.scon,
                 pm.tlen,
@@ -277,6 +286,9 @@ def fullsim(parameters, spice_file=""):
                 pm.cres,
                 pm.cind,
                 pm.curr,
+                pm.rise,
+                pm.fall,
+                pm.rech,
                 pm.fild,
                 pm.forc,
                 pm.acce,
@@ -285,10 +297,10 @@ def fullsim(parameters, spice_file=""):
             ])
             #writ.writerow([i+1, pm[0], pm[1], pm[2], pm[3], pm[6], tlns[i], pm[4], pm[5], dias[i], ress[i], inds[i], cnts[i], flds[i], frcs[i], accs[i], spds[i], engs[i]])
 
-    print("Test [xx]\tWdia [mm]\tBwid [mm]\tBhei [mm]\tLthi [mm]\tTurn [xx]\tClen [mm]\tScon [xx]\tTlen [mm]\tCapa [µF]\tVolt [1V]\tFwid [mm]\tFhei [mm]\tCres [mΩ]\tCind [µH]\tCurr [1A]\tFild [1T]\tForc [1N]\tAcce [m/s2]\tSped [m/s]\tEngy [1J]")
+    print("Test [xx]\tWdia [mm]\tBwid [mm]\tBhei [mm]\tLthi [mm]\tTurn [xx]\tTpll [xx]\tClen [mm]\tScon [xx]\tTlen [mm]\tCapa [µF]\tVolt [1V]\tFwid [mm]\tFhei [mm]\tCres [mΩ]\tCind [µH]\tCurr [1A]\tRise [ms]\tFall [ms]\tRech [ms]\tFild [1T]\tForc [1N]\tAcce [m/s2]\tSped [m/s]\tEngy [1J]")
     for i in range(len(parameters)):
         pm = parameters[i]
-        print(f"{i+1}\t\t{pm.wdia:.2f}\t\t{pm.bwid:.2f}\t\t{pm.bhei:.2f}\t\t{pm.lthi:.2f}\t\t{pm.turn:.0f}\t\t{pm.clen:.2f}\t\t{pm.scon:.0f}\t\t{pm.scon*pm.clen:.2f}\t\t{pm.capa:.2f}\t\t{pm.volt:.1f}\t\t{pm.fwid:.2f}\t\t{pm.fhei:.2f}\t\t{pm.cres:.2f}\t\t{pm.cind:.2f}\t\t{pm.curr:.2f}\t\t{pm.fild:.4f}\t\t{pm.forc:.4f}\t\t{pm.acce:.2f}\t\t{pm.sped:.4f}\t\t{pm.engy:.4f}")
+        print(f"{i+1}\t\t{pm.wdia:.2f}\t\t{pm.bwid:.2f}\t\t{pm.bhei:.2f}\t\t{pm.lthi:.2f}\t\t{pm.turn:.0f}\t\t{pm.tpll:.0f}\t\t{pm.clen:.2f}\t\t{pm.scon:.0f}\t\t{pm.scon*pm.clen:.2f}\t\t{pm.capa:.0f}\t\t{pm.volt:.1f}\t\t{pm.fwid:.2f}\t\t{pm.fhei:.2f}\t\t{pm.cres:.2f}\t\t{pm.cind:.2f}\t\t{pm.curr:.2f}\t\t{pm.rise:.3f}\t\t{pm.fall:.3f}\t\t{pm.rech:.2f}\t\t{pm.fild:.4f}\t\t{pm.forc:.4f}\t\t{pm.acce:.2f}\t\t{pm.sped:.4f}\t\t{pm.engy:.4f}")
     #print(frcs)
 
 
@@ -302,43 +314,30 @@ def fullsim(parameters, spice_file=""):
 
 
 
-"""
+
 fullsim([Coilsim(Wdia, Bwid, Bhei, Lthi, Turn, Clen, Capa, Volt, Scon)
-         for Wdia in [awg(i) for i in range(12, 18+1, 2)] # mm (+ AWG)
+         for Wdia in [awg(i) for i in range(14, 16+1, 2)] # mm (+ AWG)
          for Bwid in [24] # mm
          for Bhei in [3] # mm
-         for Lthi in [i/2 for i in range(2,10+1)] # mm
-         for Turn in [i for i in range(25, 250+1, 25)] # count
-         for Clen in [60, 80, 100] # mm
-         for Capa in [1000] # uF
-         for Volt in [90] # V
-         for Scon in [10] # count
-         ],
-         "ltspice/coilgunauto.asc")
-"""
-"""
-fullsim([Coilsim(Wdia, Bwid, Bhei, Lthi, Turn, Clen, Capa, Volt, Scon)
-         for Wdia in [awg(12),awg(14),awg(16)] # mm (+ AWG)
-         for Bwid in [24] # mm
-         for Bhei in [3] # mm
-         for Lthi in [x/2 for x in range(2,11,1)] # mm
-         for Turn in [x for x in range(25, 250+1, 25)] # count
+         for Lthi in [i for i in range(2,6)] # mm
+         for Turn in [i for i in range(25, 200+1, 25)] # count
          for Clen in [30,40,50] # mm
-         for Capa in [10000] # uF
-         for Volt in [63] # V
+         for Capa in [1000,10000] # uF
+         for Volt in [63,90] # V
          for Scon in [20] # count
          ],
-         "ltspice/coilgunauto.asc")
+         "ltspice/coilgunauto2.asc")
 """
 fullsim([Coilsim(Wdia, Bwid, Bhei, Lthi, Turn, Clen, Capa, Volt, Scon)
-         for Wdia in [awg(12)] # mm (+ AWG)
+         for Wdia in [awg(i) for i in [12]] # mm (+ AWG)
          for Bwid in [24] # mm
          for Bhei in [3] # mm
          for Lthi in [2] # mm
          for Turn in [75] # count
          for Clen in [40] # mm
-         for Capa in [10000] # uF
-         for Volt in [63] # V
+         for Capa in [1000,10000] # uF
+         for Volt in [63,90] # V
          for Scon in [20] # count
          ],
-         "ltspice/coilgunauto.asc")
+         "ltspice/coilgunauto2.asc")
+"""
