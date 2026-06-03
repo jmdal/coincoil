@@ -344,7 +344,7 @@ fullsim([Coilsim(Wdia, Bwid, Bhei, Lthi, Turn, Clen, Capa, Volt, Scon)
          for Bwid in [24] # mm
          for Bhei in [3] # mm
          for Lthi in [3] # mm
-         for Turn in [120] # count
+         for Turn in [90] # count
          for Clen in [50] # mm
          for Capa in [10000] # uF
          for Volt in [90] # V
